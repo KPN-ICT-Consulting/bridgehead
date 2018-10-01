@@ -78,6 +78,7 @@ build:
   # in this section can be used to skip default processing for CI.
   ci:
     - echo "==== Validate the scripts ====" &&
+      pwd && ls -al &&
       terraform init;
       if [ "$BRANCH" != "master" ]; then
            echo "==== Tests and Quality control for the scripts ====";  
@@ -104,7 +105,7 @@ build:
            echo "==== Release the code ====";
            git checkout -b releases;
            git merge --no-ff development;
-           git commit -a -m "Development merged into releases"
+           git commit -a -m "Development merged into releases";
       elif [ "$BRANCH" == "releases" ]; then
            echo "==== do something? ====";
       elif [ "$BRANCH" == "master" ]; then
