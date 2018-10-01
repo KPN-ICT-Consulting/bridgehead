@@ -78,11 +78,10 @@ build:
   # in this section can be used to skip default processing for CI.
   ci:
     - echo "==== Validate the scripts ====" &&
-      pwd && ls -al &&
       mkdir -p build/terraform &&
       cp -r src/main/terraform build/terraform &&
       cd build/terraform &&
-      pwd && ls -al 
+      pwd && ls -al &&
       terraform init;
       if [ "$BRANCH" != "master" ]; then
            echo "==== Tests and Quality control for the scripts ====";  
