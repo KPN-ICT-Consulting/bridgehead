@@ -105,7 +105,7 @@ build:
            echo "==== Release the code ====";
            git checkout -b releases;
            git merge --no-ff development;
-           git commit -a -m "Development merged into releases";
+           git push origin releases;
       elif [ "$BRANCH" == "releases" ]; then
            echo "==== do something? ====";
       elif [ "$BRANCH" == "master" ]; then
