@@ -102,12 +102,11 @@ build:
 
   on_success:
     - if [ "$BRANCH" == "development" ]; then
-           echo "==== Release the code ====";
-           git checkout -b releases;
-           git merge --no-ff development;
-           git push origin releases;
-      elif [ "$BRANCH" == "releases" ]; then
-           echo "==== do something? ====";
+           echo "==== Request a pull into releases branch ====";
+           git request-pull $REPO_NAME development;
+      elif [ "$BRANCH" == "release-$RELEASE_TAG" ]; then
+           echo "==== Request a pull into master branch ====";
+           git request-pull $REPO_NAME "release-$RELEASE_TAG";
       elif [ "$BRANCH" == "master" ]; then
            echo "==== Publish the next Release ====";   
            git tag -a "$RELEASE_TAG";
