@@ -81,21 +81,20 @@ build:
       mkdir -p build/terraform &&
       cp -r src/main/terraform/* build/terraform &&
       cd build/terraform &&
-      pwd && ls -al &&
       terraform init;
       if [ "$BRANCH" != "master" ]; then
            echo "==== Tests and Quality control for the scripts ====";  
-           echo "TODO";
+           terraform validate;
       elif [ "$BRANCH" == "master" ]; then
-           echo "==== do somthing smart here ====";
+           echo "==== do something smart here if necessary ====";
       else
-           echo "==== Unknown branch ====";
+           echo "==== Unsupported branch ====";
       fi
     - echo "==== CI completed. Move to post CI ===="
 
   post_ci:
     - echo "==== Post CI tasks ==== ";
-      if [ "$BRANCH" == "releases" ]; then
+      if [ "$BRANCH" == "release-$RELEASE_TAG" ]; then
            echo "==== Maybe needed ==== ";
       elif [ "$BRANCH" == "master" ]; then
            echo "==== Maybe needed ==== ";
