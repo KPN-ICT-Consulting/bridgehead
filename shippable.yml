@@ -132,8 +132,7 @@ integrations:
           branches:
             only:
                 - master
-                - release
-                - development
+                - release-$RELEASE_TAG
           on_success: always
           on_failure: always
           on_pull_request: always
