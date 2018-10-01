@@ -100,13 +100,14 @@ build:
            echo "==== No Post CI tasks required ====";
       fi
 
+  #git pull-request -c -m "Request pull development branch into release-$RELEASE_TAG";
   on_success:
     - if [ "$BRANCH" == "development" ]; then
            echo "==== Request a pull into release-$RELEASE_TAG branch ====";
-           git pull-request -c -m "Request pull development branch into release-$RELEASE_TAG";
+           git request-pull development;
       elif [ "$BRANCH" == "release-$RELEASE_TAG" ]; then
            echo "==== Request a pull into master branch ====";
-           git pull-request -c -m "Request pull release-$RELEASE_TAG branch into master";
+           git request-pull release-$RELEASE_TAG;
       elif [ "$BRANCH" == "master" ]; then
            echo "==== Publish the next Release ====";   
            git tag -a "$RELEASE_TAG";
