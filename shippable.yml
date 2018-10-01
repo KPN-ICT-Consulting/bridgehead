@@ -79,7 +79,7 @@ build:
   ci:
     - echo "==== Validate the scripts ====" &&
       mkdir -p build/terraform &&
-      cp -r src/main/terraform build/terraform &&
+      cp -r src/main/terraform/* build/terraform &&
       cd build/terraform &&
       pwd && ls -al &&
       terraform init;
