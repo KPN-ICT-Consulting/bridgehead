@@ -157,6 +157,7 @@ integrations:
 
     generic:     
         - integrationName: BridgeheadValues
+        - integrationName: aws-Integration
 
     
 #### END CI CONFIG
