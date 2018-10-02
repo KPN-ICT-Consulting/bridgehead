@@ -55,17 +55,12 @@ build:
     - echo "==== Prepare environment ====" &&
       mkdir -p $TEST_RESULTS_DIR && 
       mkdir -p $CODE_COVERAGE_DIR && 
-      pushd $TESTS_LOC_DIR;
-      if [ "$BRANCH" == "development" ]; then
-           echo "==== Development branch ====";
-      elif [ "$BRANCH" == "release" ]; then
-           echo "==== Release branch ====";
-      elif [ "$BRANCH" == "master" ]; then
-           echo "==== Master branch ====";
-      else
-           echo "==== Unknown branch ====";
+      pushd $TESTS_LOC_DIR &&
+      echo "==== $BRANCH branch will be executed ====";
+      if [ "$DEBUG" == "true" ]; then
+           echo "==== DEBUG List all environment variables ====";
+           printenv;
       fi
-    - echo "==== DEBUG List all environment variables ====" && printenv
 
   # Probably not needed, but keep this code here until proven
   #pre_ci_boot:
@@ -84,15 +79,16 @@ build:
       echo "==== Replace region variables as set in Shippable ====";
       if [ "$BRANCH" == "development" ]; then
            sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
-      elif [ "$BRANCH" == "master" ]; then
+      elif [ "$BRANCH" == "release-$RELEASE_TAG" ]; then
            sed -i -r "s|BRANCH_BASED_REGION|$TST_REGION|g" main.tf;       
       elif [ "$BRANCH" == "master" ]; then
            sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
       else
            echo "==== Unsupported branch ====";
       fi
-      
-      more main.tf
+    - if [ "$DEBUG" == "true" ]; then
+           more main.tf;
+      fi
     - echo "==== Initialize Terraform and validate the scripts ====" &&
       terraform init;
       if [ "$BRANCH" != "master" ]; then
@@ -107,13 +103,13 @@ build:
 
   post_ci:
     - echo "==== Post CI tasks ==== ";
-      if [ "$BRANCH" == "release-$RELEASE_TAG" ]; then
-           echo "==== Maybe needed ==== ";
-      elif [ "$BRANCH" == "master" ]; then
-           echo "==== Maybe needed ==== ";
-      else
-           echo "==== No Post CI tasks required ====";
-      fi
+      #if [ "$BRANCH" == "release-$RELEASE_TAG" ]; then
+      #     echo "==== Maybe needed ==== ";
+      #elif [ "$BRANCH" == "master" ]; then
+      #     echo "==== Maybe needed ==== ";
+      #else
+      #     echo "==== No Post CI tasks required ====";
+      #fi
 
   #git pull-request -c -m "Request pull development branch into release-$RELEASE_TAG";
   on_success:
@@ -127,7 +123,7 @@ build:
            echo "==== Publish the next Release ====";   
            git tag -a "$RELEASE_TAG";
       else
-           echo "==== Unknown branch ====";
+           echo "==== Unsupported branch $BRANCH ====";
       fi
 
   on_failure:

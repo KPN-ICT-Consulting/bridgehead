@@ -25,7 +25,7 @@
 # S3 BUCKETS FOR CLOUDFRONT
 #
 resource "aws_s3_bucket" "www_bucket" {
-	count	= "${var.count}"
+	#count	= "${var.count}"
 	
 	bucket 	= "${var.s3_bucket_name}"
 	acl    	= "private"
