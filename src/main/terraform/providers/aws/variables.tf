@@ -33,6 +33,7 @@ variable "bucket" {
 	description = "Terraform State S3 bucket configuration"
 	type = "map"
 	default = {
+	    count					= 1
 		s3_bucket_name			= "Terraform"
 		bucket_name_tag 		= "Terraform State"
 		s3_bucket_versioning 	= "true"			# true if enabled, false is disabled
