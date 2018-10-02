@@ -148,17 +148,12 @@ integrations:
           on_pull_request: always
           on_start: always
 
-   # hub:
-   #     - integrationName: AWS
-   #       type: ecr
-   #       region: eu-west-1
-#          agent_only:
-#          branches:
+    hub:
+        - integrationName: AWS
+          type: amazonkeys
 
     generic:     
         - integrationName: BridgeheadValues
-        - integrationName: AWS
-
     
 #### END CI CONFIG
 
