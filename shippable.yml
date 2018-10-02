@@ -81,6 +81,19 @@ build:
       mkdir -p build/terraform &&
       cp -r src/main/terraform/* build/terraform &&
       cd build/terraform &&
+      echo "==== Replace region variables as set in Shippable ====";
+      if [ "$BRANCH" == "development" ]; then
+           sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
+      elif [ "$BRANCH" == "master" ]; then
+           sed -i -r "s|BRANCH_BASED_REGION|$TST_REGION|g" main.tf;       
+      elif [ "$BRANCH" == "master" ]; then
+           sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
+      else
+           echo "==== Unsupported branch ====";
+      fi
+      
+      more main.tf
+    - echo "==== Initialize Terraform and validate the scripts ====" &&
       terraform init;
       if [ "$BRANCH" != "master" ]; then
            echo "==== Tests and Quality control for the scripts ====";  
@@ -123,7 +136,8 @@ build:
   cache: false
 
 integrations:
-# If you are using integrations, you'll need to set it up in two places. Subscription settings & here in this section of the yml.
+# If you are using integrations, you'll need to set it up in two places. 
+# Subscription settings & here in this section of the yml.
     notifications:
         - integrationName: Slack
           type: slack
