@@ -35,10 +35,10 @@ module "aws" {
 
 terraform {
 	required_version = "> 0.7.0"
-	backend "s3" {
-		bucket = "bridgehead"
-		key    = "terraform/bridgehead-tfstate"
-		region = "BRANCH_BASED_REGION"
-	}
+#	backend "s3" {
+#		bucket = "bridgehead"
+#		key    = "terraform/bridgehead-tfstate"
+#		region = "BRANCH_BASED_REGION"
+#	}
 }
 
