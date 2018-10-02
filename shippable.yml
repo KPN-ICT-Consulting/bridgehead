@@ -179,9 +179,9 @@ resources:
     #    branch: "releases"
 
    #### INTEGRATIONS ####
-   # - name: aws-Integration
-   #   type: integration
-   #   integration: AWS
+    - name: aws-Integration
+      type: integration
+      integration: AWS
       
     - name: BridgeheadValues
       type: integration
