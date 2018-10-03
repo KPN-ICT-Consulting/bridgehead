@@ -229,13 +229,7 @@ jobs:
                     cp -r $SCRIPTSFROMSRCREPO_STATE/src/main/terraform/* build/terraform &&
                     cd build/terraform &&
                     echo "==== Replace region variables as set in Shippable ====";
-                    if [ "$BRANCH" == "development" ]; then
-                       sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
-                    elif [ "$BRANCH" == "master" ]; then
-                         sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
-                    else
-                         echo "==== Unsupported branch ====";
-                    fi
+                    sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
                   - echo "==== Initialize Terraform and execute the scripts ====" &&
                     terraform init &&
                     terraform plan #&&
