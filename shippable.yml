@@ -72,7 +72,7 @@ build:
   # commands in this section run inside your CI container. In addition, any commands such as ls, 
   # in this section can be used to skip default processing for CI.
   ci:
-    - echo "==== Validate the scripts ====" &&
+    - echo "==== Prepare the scripts ====" &&
       mkdir -p build/terraform &&
       cp -r src/main/terraform/* build/terraform &&
       cd build/terraform &&
@@ -218,9 +218,14 @@ jobs:
         - TASK:
             name: configureEnvironment
             script:
-                  - echo "==== Validate the scripts ====" &&
+                  - if [ "$DEBUG" == "true" ]; then
+                       echo "==== List env's and paths ====";
+                       printenv;
+                       ls -al;
+                    fi
+                  - echo "==== Prepare the scripts ====" &&
                     mkdir -p build/terraform &&
-                    cp -r src/main/terraform/* build/terraform &&
+                    cp -r $SCRIPTSFROMSRCREPO_STATE/src/main/terraform/* build/terraform &&
                     cd build/terraform &&
                     echo "==== Replace region variables as set in Shippable ====";
                     if [ "$BRANCH" == "development" ]; then
