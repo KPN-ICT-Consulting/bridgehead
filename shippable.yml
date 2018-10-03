@@ -220,6 +220,9 @@ jobs:
         - TASK:
             name: configureEnvironment
             script:
+                  - echo "==== Prepare env ====" &&
+                    export AMAZONKEYS_ACCESSKEY=$AWSINTEGRATION_INTEGRATION_ACCESSKEY &&
+                    export AMAZONKEYS_SECRETKEY=$AWSINTEGRATION_INTEGRATION_SECRETKEY
                   - if [ "$DEBUG" == "true" ]; then
                        echo "==== List env's and paths ====";
                        printenv;
