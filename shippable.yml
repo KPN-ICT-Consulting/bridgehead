@@ -215,6 +215,7 @@ jobs:
         - NOTIFY: Slack
       steps:
         - IN: scripts-from-srcRepo
+        - IN: BridgeheadValues
         - TASK:
             name: configureEnvironment
             script:
