@@ -216,6 +216,7 @@ jobs:
       steps:
         - IN: scripts-from-srcRepo
         - IN: BridgeheadValues
+        - IN: aws-Integration
         - TASK:
             name: configureEnvironment
             script:
