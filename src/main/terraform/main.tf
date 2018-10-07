@@ -29,7 +29,8 @@
 module "aws" {
 	source = "./providers/aws"
 	
-	default_region = "BRANCH_BASED_REGION"  
+	default_region = "BRANCH_BASED_REGION"
+	iam_root = "CAL_DEPLOYER"
   	#isStaging	= "${var.staging}"
 }
 

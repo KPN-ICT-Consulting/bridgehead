@@ -22,11 +22,8 @@
 #*/
 
 #
-# Root outputs
+# IAM variables
 #
-output "iam_root_access_key" {
-	value = "${aws.iam_root_access_key}"
-}
-output "iam_root_secret_key" {
-	value = "${aws.iam_root_secret_key}"
+variable "iam_root" {
+	description = "Bridgehead user"
 }
