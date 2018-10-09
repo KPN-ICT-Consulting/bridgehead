@@ -22,11 +22,24 @@
 #*/
 
 #
-# Root outputs
+# IAM Users
 #
-output "iam_root_access_key" {
-	value = "${module.iam.iam_root_access_key}"
+resource "aws_iam_user" "iam_root" {
+	name = "${var.iam_root}"
+	path = "/cal/"
 }
-output "iam_root_secret_key" {
-	value = "${module.iam.iam_root_secret_key}"
+
+# The most important part is the iam:PassRole. With that, this user can give roles to ECS tasks.
+# In theory the user can give the task Admin rights. To make sure that does not happen we restrict
+# the user and allow him only to hand out roles in /ecs/ path. You still need to be careful not
+# to have any roles in there with full admin rights, but no ECS task should have these rights!
+resource "aws_iam_user_policy" "iam_root_policy" {
+	name = "iam_root_policy"
+	user = "${aws_iam_user.iam_root.name}"
+	
+	policy = "${file("${path.module}/policies/root.json")}"
+}
+
+resource "aws_iam_access_key" "iam_root" {
+	user = "${aws_iam_user.iam_root.name}"
 }

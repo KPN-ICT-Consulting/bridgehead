@@ -22,11 +22,11 @@
 #*/
 
 #
-# Root outputs
+# IAM outputs
 #
 output "iam_root_access_key" {
-	value = "${module.iam.iam_root_access_key}"
+	value = "${aws_iam_access_key.iam_root.id}"
 }
 output "iam_root_secret_key" {
-	value = "${module.iam.iam_root_secret_key}"
+	value = "${aws_iam_access_key.iam_root.secret}"
 }

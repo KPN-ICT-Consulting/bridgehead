@@ -22,11 +22,8 @@
 #*/
 
 #
-# Root outputs
+# IAM variables
 #
-output "iam_root_access_key" {
-	value = "${module.iam.iam_root_access_key}"
-}
-output "iam_root_secret_key" {
-	value = "${module.iam.iam_root_secret_key}"
+variable "iam_root" {
+	description = "Bridgehead user"
 }

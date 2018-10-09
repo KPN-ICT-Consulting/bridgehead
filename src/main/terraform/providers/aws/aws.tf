@@ -41,8 +41,8 @@ module "s3_buckets" {
 	s3_bucket_versioning	= "${var.bucket["s3_bucket_versioning"]}"
 }
 
-#module "iam" {
-#	source = "./iam"
+module "iam" {
+	source = "./iam"
 	
-	#TODO variables
-#}
+	iam_root = "${var.iam_root}"
+}
