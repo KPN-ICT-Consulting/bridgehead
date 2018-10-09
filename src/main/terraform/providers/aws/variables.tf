@@ -34,7 +34,7 @@ variable "bucket" {
 	type = "map"
 	default = {
 	    count					= 1
-		s3_bucket_name			= "terraform"
+		s3_bucket_name			= "kma-terraform"
 		bucket_name_tag 		= "Terraform State"
 		s3_bucket_versioning 	= "true"			# true if enabled, false is disabled
 	}
