@@ -25,8 +25,8 @@
 # Root outputs
 #
 output "iam_root_access_key" {
-	value = "${iam.iam_root_access_key}"
+	value = "${module.iam.iam_root_access_key}"
 }
 output "iam_root_secret_key" {
-	value = "${iam.iam_root_secret_key}"
+	value = "${module.iam.iam_root_secret_key}"
 }

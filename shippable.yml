@@ -90,7 +90,8 @@ build:
       fi
     - echo "==== Initialize Terraform and validate the scripts ====" &&
       terraform init &&
-      terraform validate
+      terraform validate &&
+      terraform plan
     - echo "==== CI completed. Move to post CI ===="
 
   post_ci:

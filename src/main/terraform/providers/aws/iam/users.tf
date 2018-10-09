@@ -37,7 +37,7 @@ resource "aws_iam_user_policy" "iam_root_policy" {
 	name = "iam_root_policy"
 	user = "${aws_iam_user.iam_root.name}"
 	
-	policy = "${file("policies/root.json")}"
+	policy = "${file("${path.module}/policies/root.json")}"
 }
 
 resource "aws_iam_access_key" "iam_root" {
