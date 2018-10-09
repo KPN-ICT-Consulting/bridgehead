@@ -239,8 +239,7 @@ jobs:
                     sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
                   - echo "==== Initialize Terraform and execute the scripts ====" &&
                     terraform init &&
-                    terraform plan #&&
-                    #terraform apply
+                    terraform apply
       on_failure:
         - NOTIFY: Slack
         
