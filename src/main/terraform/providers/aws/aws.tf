@@ -25,7 +25,7 @@ provider "aws" {
 	#shared_credentials_file = "${path.cwd}/tf-temp/credentials"
 	profile = "bridgehead"
 	profile = "default"
-	region = "${var.default_region}"
+	region = "${var.region}"
 }
 
 #
@@ -36,7 +36,7 @@ module "s3_buckets" {
 	
 	count					= "${var.bucket["count"]}"
 	
-	s3_bucket_name			= "${var.bucket["s3_bucket_name"]}"
+	s3_bucket_name			= "${format(var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
 	bucket_name_tag			= "${var.bucket["bucket_name_tag"]}"
 	s3_bucket_versioning	= "${var.bucket["s3_bucket_versioning"]}"
 }

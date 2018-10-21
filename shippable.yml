@@ -1,5 +1,5 @@
 #/*
-# * Copyright (c) 2018 JP-L, https://www.jp-l.org/
+# * Copyright (c) 2018 KPN
 # *
 # * Permission is hereby granted, free of charge, to any person obtaining
 # * a copy of this software and associated documentation files (the
@@ -33,7 +33,6 @@ go:
 branches:
   only:
     - master
-    - releases
     - development
 
 # Specify which services you need. This is only valid if you use the default Shippable image for your build
@@ -77,11 +76,12 @@ build:
       cp -r src/main/terraform/* build/terraform &&
       cd build/terraform &&
       echo "==== Replace region variables as set in Shippable ====";
-      sed -i -r "s|CAL_DEPLOYER|$CAL|g" main.tf;
       if [ "$BRANCH" == "development" ]; then
-           sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;       
+           sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
+           sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$DEV_CAL|g" main.tf;      
       elif [ "$BRANCH" == "master" ]; then
            sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
+           sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$PROD_CAL|g" main.tf;
       else
            echo "==== Unsupported branch ====";
       fi
@@ -91,7 +91,11 @@ build:
     - echo "==== Initialize Terraform and validate the scripts ====" &&
       terraform init &&
       terraform validate &&
-      terraform plan
+      terraform plan &&
+      if [ "$BRANCH" == "development" ]; then
+           echo "Dev TF plans should fail fast when there are errors in the TF config, plan or execution, therefor we run apply in CI";
+           terraform apply -auto-approve -var 'isStaging=true';
+      fi
     - echo "==== CI completed. Move to post CI ===="
 
   post_ci:
@@ -235,11 +239,11 @@ jobs:
                     cp -r $SCRIPTSFROMSRCREPO_STATE/src/main/terraform/* build/terraform &&
                     cd build/terraform &&
                     echo "==== Replace region variables as set in Shippable ====";
-                    sed -i -r "s|CAL_DEPLOYER|$CAL|g" main.tf;
                     sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
+                    sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$PROD_CAL|g" main.tf;
                   - echo "==== Initialize Terraform and execute the scripts ====" &&
                     terraform init &&
-                    terraform apply -auto-approve
+                    terraform apply -auto-approve -var 'isStaging=false'
       on_failure:
         - NOTIFY: Slack
         

@@ -29,9 +29,9 @@
 module "aws" {
 	source = "./providers/aws"
 	
-	default_region = "BRANCH_BASED_REGION"
-	iam_root = "CAL_DEPLOYER"
-  	#isStaging	= "${var.staging}"
+	region = "BRANCH_BASED_REGION"
+	iam_root = "BRANCH_BASED_CAL_DEPLOYER"
+  	isStaging	= "${var.staging}"
 }
 
 terraform {
