@@ -94,7 +94,7 @@ build:
       terraform plan &&
       if [ "$BRANCH" == "development" ]; then
            echo "Dev TF plans should fail fast when there are errors in the TF config, plan or execution, therefor we run apply in CI";
-           terraform apply -auto-approve -var 'isStaging=true';
+           terraform apply -auto-approve -var 'staging=true';
       fi
     - echo "==== CI completed. Move to post CI ===="
 
@@ -243,7 +243,7 @@ jobs:
                     sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$PROD_CAL|g" main.tf;
                   - echo "==== Initialize Terraform and execute the scripts ====" &&
                     terraform init &&
-                    terraform apply -auto-approve -var 'isStaging=false'
+                    terraform apply -auto-approve -var 'staging=false'
       on_failure:
         - NOTIFY: Slack
         
