@@ -36,7 +36,7 @@ module "s3_buckets" {
 	
 	count					= "${var.bucket["count"]}"
 	
-	s3_bucket_name			= "${format(%s%s, var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
+	s3_bucket_name			= "${format("%s%s", var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
 	bucket_name_tag			= "${var.bucket["bucket_name_tag"]}"
 	s3_bucket_versioning	= "${var.bucket["s3_bucket_versioning"]}"
 }
