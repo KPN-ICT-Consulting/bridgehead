@@ -21,6 +21,11 @@
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
 
+locals {
+	bucket_name 	= "${format("%s%s", var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
+	dynamodb_name 	= "${format("%s%s", "terraform-state-lock-dynamo", var.isStaging ? "-dev" : "-prod")}"
+}
+
 provider "aws" {
 	profile = "default"
 	region = "${var.region}"
@@ -32,8 +37,10 @@ provider "aws" {
 resource "aws_s3_bucket" "state_bucket" {
 	count					= "${var.createStateStorage ? var.bucket["count"] : 0}"
 	
-	bucket 					= "${format("%s%s", var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
+	bucket 					= "${local.bucket_name}"
 	acl    					= "private"
+	
+	policy 					= "${file("${path.module}/policies/s3.json")}"
 	
 	versioning {
 		enabled 			= "${var.bucket["s3_bucket_versioning"]}"
@@ -53,10 +60,12 @@ resource "aws_s3_bucket" "state_bucket" {
 resource "aws_dynamo_table" "dynamodb_tf_state_lock" {
 	count					= "${var.createStateStorage ? 1 : 0}"
 	
-	name 					= "${format("%s%s", "terraform-state-lock-dynamo", var.isStaging ? "-dev" : "-prod")}"
+	name 					= "${local.dynamodb_name}"
 	hash_key 				= "LockID"
 	read_capacity			= 20
 	write_capacity			= 20
+	
+	policy 					= "${file("${path.module}/policies/dynamodb.json")}"
 	
 	attribute {
 		name				= "LockID"

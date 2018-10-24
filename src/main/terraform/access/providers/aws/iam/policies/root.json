@@ -13,9 +13,29 @@
         "iam:ListGroups",
         "iam:ListPolicies",
         "iam:ListRoles",
-        "iam:ListUsers"
+        "iam:ListUsers",
+        "application-autoscaling:RegisterScalableTarget",
+        "application-autoscaling:DeregisterScalableTarget",
+        "application-autoscaling:PutScalingPolicy",
+        "application-autoscaling:DeleteScalingPolicy",
+        "cloudwatch:PutMetricAlarm",
+        "cloudwatch:DeleteAlarms",
+        "ecs:DeregisterTaskDefinition",
+        "ecs:UpdateService",
+        "ecs:CreateService",
+        "ecs:RegisterTaskDefinition",
+        "ecs:DeleteService",
+        "ecs:DescribeServices",
+        "ecs:ListTaskDefinitions"
       ],
+      "Resource": "*"
+    },
+    {
       "Effect": "Allow",
+      "Action": [
+        "iam:PassRole",
+        "iam:ListRoles"
+      ],
       "Resource": "arn:aws:iam::*:role/cal/*"
     }
   ]
