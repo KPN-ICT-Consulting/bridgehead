@@ -104,11 +104,11 @@ build:
          fi;
          echo "==== STATE - Initialize Terraform and validate the scripts ====";
          terraform init;
-         terraform validate -var 'staging=true' -var 'create_state_storage=$CREATE_STATE_STORAGE';
+         terraform validate -var staging=true -var create_state_storage=$CREATE_STATE_STORAGE;
          terraform plan -var 'staging=true' -var 'create_state_storage=$CREATE_STATE_STORAGE';
          if [ "$BRANCH" == "development" ]; then
             echo "Dev TF plans should fail fast when there are errors in the TF config, plan or execution, therefor we run apply in CI";
-            terraform apply -auto-approve -var 'staging=true' -var 'create_state_storage=$CREATE_STATE_STORAGE';
+            terraform apply -auto-approve -var staging=true -var create_state_storage=$CREATE_STATE_STORAGE;
          fi
       fi
     - echo "==== ACCESS ====" &&
@@ -131,11 +131,11 @@ build:
       fi; 
       echo "==== Initialize Terraform and validate the scripts ====" &&
       terraform init &&
-      terraform validate -var 'staging=true' &&
-      terraform plan -var 'staging=true' &&
+      terraform validate -var staging=true &&
+      terraform plan -var staging=true &&
       if [ "$BRANCH" == "development" ]; then
            echo "Dev TF plans should fail fast when there are errors in the TF config, plan or execution, therefor we run apply in CI";
-           terraform apply -auto-approve -var 'staging=true';
+           terraform apply -auto-approve -var staging=true;
       fi
     - echo "==== CI completed. Move to post CI ===="
 
@@ -286,7 +286,7 @@ jobs:
                    sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf
                  - echo "==== Initialize Terraform and execute the scripts ====" &&
                    terraform init &&
-                   terraform apply -auto-approve -var 'staging=false' -var 'create_state_storage=$MASTER_CREATE_STATE_STORAGE'
+                   terraform apply -auto-approve -var staging=false -var create_state_storage=$MASTER_CREATE_STATE_STORAGE
       on_failure:
         - NOTIFY: Slack
                 
@@ -312,7 +312,7 @@ jobs:
                     sed -i -r "s|STAGING_ENV|"prod"|g" main.tf
                   - echo "==== Initialize Terraform and execute the scripts ====" &&
                     terraform init &&
-                    terraform apply -auto-approve -var 'staging=false'
+                    terraform apply -auto-approve -var staging=false
       on_failure:
         - NOTIFY: Slack
         
