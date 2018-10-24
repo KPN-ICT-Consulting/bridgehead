@@ -37,8 +37,8 @@ module "aws" {
 terraform {
 	required_version = "> 0.7.0"
 	backend "s3" {
-		bucket 			= "kma-terraform-${var.isStaging ? "-dev" : "-prod"}"
-		dynamodb_table 	= "terraform-state-lock-dynamo-${var.isStaging ? "-dev" : "-prod"}"
+		bucket 			= "kma-terraform-STAGING_ENV"
+		dynamodb_table 	= "terraform-state-lock-dynamo-STAGING_ENV"
 		key    			= "terraform/bridgehead-tfstate"
 		region 			= "BRANCH_BASED_REGION"
 	}
