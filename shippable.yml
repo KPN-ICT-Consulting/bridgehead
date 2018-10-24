@@ -44,6 +44,8 @@ env:
     - CODE_COVERAGE_DIR=$SHIPPABLE_REPO_DIR/shippable/codecoverage
     - TESTS_LOC_DIR=$SHIPPABLE_REPO_DIR/src/test
     - MOD_LOC=$SHIPPABLE_REPO_DIR/node_modules/.bin/
+    - DEV_CREATE_STATE_STORAGE="false"
+    - MASTER_CREATE_STATE_STORAGE="true"
 
 #matrix:
 
@@ -55,8 +57,8 @@ build:
       mkdir -p $TEST_RESULTS_DIR && 
       mkdir -p $CODE_COVERAGE_DIR && 
       pushd $TESTS_LOC_DIR &&
-      echo "==== $BRANCH branch will be executed ====";
-      if [ "$DEBUG" == "true" ]; then
+      echo "==== $BRANCH branch will be executed ===="
+    - if [ "$DEBUG" == "true" ]; then
            echo "==== DEBUG List all environment variables ====";
            printenv;
       fi
@@ -71,30 +73,69 @@ build:
   # commands in this section run inside your CI container. In addition, any commands such as ls, 
   # in this section can be used to skip default processing for CI.
   ci:
-    - echo "==== Prepare the scripts ====" &&
-      mkdir -p build/terraform &&
-      cp -r src/main/terraform/* build/terraform &&
-      cd build/terraform &&
-      echo "==== Replace region variables as set in Shippable ====";
+    - mkdir -p $SHIPPABLE_REPO_DIR/build/terraform &&
+      cp -r src/main/terraform/* $SHIPPABLE_REPO_DIR/build/terraform &&
+      if [ "$BRANCH" == "development" ] && [ "$DEV_CREATE_STATE_STORAGE" == "true" ]; then
+         export CREATE_STATE_STORAGE=true;
+      elif [ "$BRANCH" == "master" ] && [ "$MASTER_CREATE_STATE_STORAGE" == "true" ]; then
+         export CREATE_STATE_STORAGE="true";
+      else
+         export CREATE_STATE_STORAGE="false";
+      fi;
+      if [ "$DEBUG" == "true" ]; then
+         ls -l src/main/terraform/;
+         ls -l $SHIPPABLE_REPO_DIR/build/terraform/;
+         echo "$CREATE_STATE_STORAGE";
+      fi
+    - echo "==== STATE ====" &&
+      if [ "$CREATE_STATE_STORAGE" == "true" ]; then
+         echo "==== STATE - Prepare the scripts ====";
+         cd $SHIPPABLE_REPO_DIR/build/terraform/state;
+         echo "==== Replace region variables as set in Shippable ====";
+         if [ "$BRANCH" == "development" ]; then
+            sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;      
+         elif [ "$BRANCH" == "master" ]; then
+            sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
+         else
+            echo "==== Unsupported branch ====";
+         fi;
+         if [ "$DEBUG" == "true" ]; then
+            more main.tf;
+         fi;
+         echo "==== STATE - Initialize Terraform and validate the scripts ====";
+         terraform init;
+         terraform validate -var staging=true -var create_state_storage=$CREATE_STATE_STORAGE;
+         terraform plan -var 'staging=true' -var 'create_state_storage=$CREATE_STATE_STORAGE';
+         if [ "$BRANCH" == "development" ]; then
+            echo "Dev TF plans should fail fast when there are errors in the TF config, plan or execution, therefor we run apply in CI";
+            terraform apply -auto-approve -var staging=true -var create_state_storage=$CREATE_STATE_STORAGE;
+         fi
+      fi
+    - echo "==== ACCESS ====" &&
+      echo "==== ACCESS - Prepare the scripts ====" &&
+      cd $SHIPPABLE_REPO_DIR/build/terraform/access &&
+      echo "==== Replace region variables as set in Shippable ====" &&
       if [ "$BRANCH" == "development" ]; then
-           sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
-           sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$DEV_CAL|g" main.tf;      
+         sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
+         sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$DEV_CAL|g" main.tf;
+         sed -i -r "s|STAGING_ENV|"dev"|g" main.tf;      
       elif [ "$BRANCH" == "master" ]; then
            sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
            sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$PROD_CAL|g" main.tf;
+           sed -i -r "s|STAGING_ENV|"prod"|g" main.tf;
       else
            echo "==== Unsupported branch ====";
-      fi
-    - if [ "$DEBUG" == "true" ]; then
-           more main.tf;
-      fi
-    - echo "==== Initialize Terraform and validate the scripts ====" &&
+      fi;
+      if [ "$DEBUG" == "true" ]; then
+         more main.tf;
+      fi; 
+      echo "==== Initialize Terraform and validate the scripts ====" &&
       terraform init &&
-      terraform validate -var 'staging=true' &&
-      terraform plan -var 'staging=true' &&
+      terraform validate -var staging=true &&
+      terraform plan -var staging=true &&
       if [ "$BRANCH" == "development" ]; then
            echo "Dev TF plans should fail fast when there are errors in the TF config, plan or execution, therefor we run apply in CI";
-           terraform apply -auto-approve -var 'staging=true';
+           terraform apply -auto-approve -var staging=true;
       fi
     - echo "==== CI completed. Move to post CI ===="
 
@@ -199,6 +240,19 @@ resources:
 # *                                                               F. Build Master branch                         *
 # *                                                               G. Publish to DockerHub after successful build *
 # ****************************************************************************************************************
+templates: &template-script
+  - echo "==== Prepare env ====" &&
+    export AWS_ACCESS_KEY_ID=$AWSINTEGRATION_INTEGRATION_ACCESSKEY &&
+    export AWS_SECRET_ACCESS_KEY=$AWSINTEGRATION_INTEGRATION_SECRETKEY
+  - if [ "$DEBUG" == "true" ]; then
+       echo "==== List env's and paths ====";
+       printenv;
+       ls -al;
+    fi
+  - echo "==== Prepare the scripts ====" &&
+    mkdir -p build/terraform &&
+    cp -r $SCRIPTSFROMSRCREPO_STATE/src/main/terraform/* build/terraform
+
 
 jobs:
     # ****************************************************************************************************************
@@ -212,8 +266,8 @@ jobs:
     #  steps:
     #    - IN: IMAGE
     #    - IN: IMAGE_VERSION
-        
-    - name: setupBridgehead
+
+    - name: setupState
       type: runSh
       triggerMode: serial
       dependencyMode: strict   # optional
@@ -224,26 +278,41 @@ jobs:
         - IN: BridgeheadValues
         - IN: aws-Integration
         - TASK:
-            name: configureEnvironment
+            name: configureState
             script:
-                  - echo "==== Prepare env ====" &&
-                    export AWS_ACCESS_KEY_ID=$AWSINTEGRATION_INTEGRATION_ACCESSKEY &&
-                    export AWS_SECRET_ACCESS_KEY=$AWSINTEGRATION_INTEGRATION_SECRETKEY
-                  - if [ "$DEBUG" == "true" ]; then
-                       echo "==== List env's and paths ====";
-                       printenv;
-                       ls -al;
-                    fi
-                  - echo "==== Prepare the scripts ====" &&
-                    mkdir -p build/terraform &&
-                    cp -r $SCRIPTSFROMSRCREPO_STATE/src/main/terraform/* build/terraform &&
-                    cd build/terraform &&
-                    echo "==== Replace region variables as set in Shippable ====";
-                    sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf;
-                    sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$PROD_CAL|g" main.tf;
+                 - *template-script
+                 - cd build/terraform/state &&
+                   echo "==== Replace region variables as set in Shippable ====" &&
+                   sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf
+                 - echo "==== Initialize Terraform and execute the scripts ====" &&
+                   terraform init &&
+                   terraform apply -auto-approve -var staging=false -var create_state_storage=$MASTER_CREATE_STATE_STORAGE
+      on_failure:
+        - NOTIFY: Slack
+                
+    - name: setupAccess
+      type: runSh
+      triggerMode: serial
+      dependencyMode: strict   # optional
+      on_start:
+        - NOTIFY: Slack
+      steps:
+        - IN: scripts-from-srcRepo
+        - IN: BridgeheadValues
+        - IN: aws-Integration
+        - IN: setupState
+        - TASK:
+            name: configureAccess
+            script:
+                  - *template-script
+                  - cd build/terraform/access &&
+                    echo "==== Replace region variables as set in Shippable ====" &&
+                    sed -i -r "s|BRANCH_BASED_REGION|$PROD_REGION|g" main.tf &&
+                    sed -i -r "s|BRANCH_BASED_CAL_DEPLOYER|$PROD_CAL|g" main.tf &&
+                    sed -i -r "s|STAGING_ENV|"prod"|g" main.tf
                   - echo "==== Initialize Terraform and execute the scripts ====" &&
                     terraform init &&
-                    terraform apply -auto-approve -var 'staging=false'
+                    terraform apply -auto-approve -var staging=false
       on_failure:
         - NOTIFY: Slack
         

@@ -20,16 +20,30 @@
 # * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
-variable "s3_bucket_name" {
-	description = "The S3 bucket name"
-}
-variable "bucket_name_tag" {
-	description = "The bucket name tag"
-}
-variable "s3_bucket_versioning" {
-	description = "Enable versioning or not"
+
+# ==== Default Region ====
+variable "region" {
+	description = "Region to setup"
 }
 
-variable "count" {
-	description = "Set to 0 if the resource is skipped. Set to 1 if the resource must be created."
+#
+# Bucket for TF state
+#
+variable "bucket" {
+	description = "Terraform State S3 bucket configuration"
+	type = "map"
+	default = {
+		s3_bucket_name			= "kma-terraform"
+		bucket_name_tag 		= "Terraform State"
+		s3_bucket_versioning 	= "true"			# true if enabled, false is disabled
+	}
+}
+
+variable "isStaging" {
+	description = "set to true if the Staging environment should be created. For Production set to false."
+	type = "string"
+}
+variable "createStateStorage" {
+	description = "set to true if we need to create the buckets. See explanation in comment"
+	type = "string"
 }

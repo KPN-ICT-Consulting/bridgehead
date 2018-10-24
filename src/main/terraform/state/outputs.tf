@@ -22,11 +22,5 @@
 #*/
 
 #
-# outputs
+# Root outputs
 #
-output "bucket_id" {
-	value = "${element(concat(aws_s3_bucket.www_bucket.*.id, list("")), 0)}"
-}
-output "bucket_domain_name" {
-	value = "${element(concat(aws_s3_bucket.www_bucket.*.bucket_domain_name, list("")), 0)}"
-}

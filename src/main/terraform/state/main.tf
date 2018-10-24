@@ -1,5 +1,5 @@
 #/*
-# * Copyright (c) 2018 KPN
+# * Copyright (c) 2018 KPN, 
 # *
 # * Permission is hereby granted, free of charge, to any person obtaining
 # * a copy of this software and associated documentation files (the
@@ -21,28 +21,20 @@
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
 
-provider "aws" {
-	#shared_credentials_file = "${path.cwd}/tf-temp/credentials"
-	profile = "bridgehead"
-	profile = "default"
-	region = "${var.region}"
+# Note: This file is based upon the awslabs terraform demo, located at:
+#
+#     https://github.com/awslabs/apn-blog/blob/tf_blog_v1.0/terraform_demo/
+#
+
+module "aws" {
+	source = "./providers/aws"
+	
+	region 				= "BRANCH_BASED_REGION"
+  	isStaging			= "${var.staging}"
+  	createStateStorage 	= "${var.create_state_storage}"
 }
 
-#
-# S3 bucket for storing TF state
-#
-module "s3_buckets" {
-	source = "./s3"
-	
-	count					= "${var.bucket["count"]}"
-	
-	s3_bucket_name			= "${format("%s%s", var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
-	bucket_name_tag			= "${var.bucket["bucket_name_tag"]}"
-	s3_bucket_versioning	= "${var.bucket["s3_bucket_versioning"]}"
+terraform {
+	required_version 	= "> 0.7.0"
 }
 
-module "iam" {
-	source = "./iam"
-	
-	iam_root = "${var.iam_root}"
-}

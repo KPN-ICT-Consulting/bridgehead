@@ -21,21 +21,13 @@
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
 
-#
-# S3 BUCKETS FOR CLOUDFRONT
-#
-resource "aws_s3_bucket" "www_bucket" {
-	count	= "${var.count}"
-	
-	bucket 	= "${var.s3_bucket_name}"
-	acl    	= "private"
-	
-	versioning {
-		enabled = "${var.s3_bucket_versioning}"
-	}
-	
-	tags {
-		Name = "${var.bucket_name_tag}"
-	}
+provider "aws" {
+	profile = "default"
+	region = "${var.region}"
 }
 
+module "iam" {
+	source = "./iam"
+	
+	iam_root = "${var.iam_root}"
+}
