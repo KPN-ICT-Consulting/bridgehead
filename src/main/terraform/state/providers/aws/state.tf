@@ -40,7 +40,7 @@ resource "aws_s3_bucket" "state_bucket" {
 	bucket 					= "${local.bucket_name}"
 	acl    					= "private"
 	
-	policy 					= "${file("${path.module}/policies/s3.json")}"
+	#policy 					= "${file("${path.module}/policies/s3.json")}"
 	
 	versioning {
 		enabled 			= "${var.bucket["s3_bucket_versioning"]}"
@@ -64,9 +64,7 @@ resource "aws_dynamodb_table" "dynamodb_tf_state_lock" {
 	hash_key 				= "LockID"
 	read_capacity			= 20
 	write_capacity			= 20
-	
-	policy 					= "${file("${path.module}/policies/dynamodb.json")}"
-	
+		
 	attribute {
 		name				= "LockID"
 		type				= "S"
