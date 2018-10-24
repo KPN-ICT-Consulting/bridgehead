@@ -132,8 +132,8 @@ build:
       echo "==== Initialize Terraform and validate the scripts ====" &&
       terraform init &&
       terraform validate -var staging=true &&
-      terraform plan -var staging=true &&
       if [ "$BRANCH" == "development" ]; then
+           terraform plan -var staging=true;
            echo "Dev TF plans should fail fast when there are errors in the TF config, plan or execution, therefor we run apply in CI";
            terraform apply -auto-approve -var staging=true;
       fi
@@ -279,6 +279,10 @@ jobs:
         - IN: aws-Integration
         - TASK:
             name: configureState
+            runtime:
+              options:
+                env:
+                  - MASTER_CREATE_STATE_STORAGE: "true"
             script:
                  - *template-script
                  - cd build/terraform/state &&
