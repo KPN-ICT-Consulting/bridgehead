@@ -41,9 +41,9 @@ variable "bucket" {
 
 variable "isStaging" {
 	description = "set to true if the Staging environment should be created. For Production set to false."
-	type = "boolean"
+	type = "string"
 }
 variable "createStateStorage" {
 	description = "set to true if we need to create the buckets. See explanation in comment"
-	type = "boolean"
+	type = "string"
 }
