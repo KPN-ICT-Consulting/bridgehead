@@ -35,7 +35,7 @@ provider "aws" {
 # S3 BUCKET FOR TF STATE
 #
 resource "aws_s3_bucket" "state_bucket" {
-	count					= "${var.createStateStorage ? var.bucket["count"] : 0}"
+	count					= "${var.createStateStorage}"
 	
 	bucket 					= "${local.bucket_name}"
 	acl    					= "private"
@@ -58,7 +58,7 @@ resource "aws_s3_bucket" "state_bucket" {
 # DynamoDB table for locking state file
 #
 resource "aws_dynamo_table" "dynamodb_tf_state_lock" {
-	count					= "${var.createStateStorage ? 1 : 0}"
+	count					= "${var.createStateStorage}"
 	
 	name 					= "${local.dynamodb_name}"
 	hash_key 				= "LockID"
