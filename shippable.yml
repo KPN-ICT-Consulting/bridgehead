@@ -58,13 +58,6 @@ build:
       mkdir -p $CODE_COVERAGE_DIR && 
       pushd $TESTS_LOC_DIR &&
       echo "==== $BRANCH branch will be executed ===="
-    - if [ "$BRANCH" == "development" ] && [ "$DEV_CREATE_STATE_STORAGE" == "true" ]; then
-         export CREATE_STATE_STORAGE=true;
-      elif [ "$BRANCH" == "master" ] && [ "$MASTER_CREATE_STATE_STORAGE" == "true" ]; then
-         export CREATE_STATE_STORAGE="true";
-      else
-         export CREATE_STATE_STORAGE="false";
-      fi
     - if [ "$DEBUG" == "true" ]; then
            echo "==== DEBUG List all environment variables ====";
            printenv;
@@ -82,6 +75,13 @@ build:
   ci:
     - mkdir -p $SHIPPABLE_REPO_DIR/build/terraform &&
       cp -r src/main/terraform/* $SHIPPABLE_REPO_DIR/build/terraform &&
+      if [ "$BRANCH" == "development" ] && [ "$DEV_CREATE_STATE_STORAGE" == "true" ]; then
+         export CREATE_STATE_STORAGE=true;
+      elif [ "$BRANCH" == "master" ] && [ "$MASTER_CREATE_STATE_STORAGE" == "true" ]; then
+         export CREATE_STATE_STORAGE="true";
+      else
+         export CREATE_STATE_STORAGE="false";
+      fi;
       if [ "$DEBUG" == "true" ]; then
          ls -l src/main/terraform/;
          ls -l $SHIPPABLE_REPO_DIR/build/terraform/;
