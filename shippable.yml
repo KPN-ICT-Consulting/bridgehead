@@ -80,12 +80,12 @@ build:
   # commands in this section run inside your CI container. In addition, any commands such as ls, 
   # in this section can be used to skip default processing for CI.
   ci:
-    - mkdir -p build/terraform &&
-      cp -r src/main/terraform/* build/terraform
+    - mkdir -p $SHIPPABLE_REPO_DIR/build/terraform &&
+      cp -r src/main/terraform/* $SHIPPABLE_REPO_DIR/build/terraform
     - echo "==== STATE ====" &&
       if [ "$CREATE_STATE_STORAGE" = true ]; then
          echo "==== STATE - Prepare the scripts ====";
-         cd build/terraform/state;
+         cd $SHIPPABLE_REPO_DIR/build/terraform/state;
          echo "==== Replace region variables as set in Shippable ====";
          if [ "$BRANCH" == "development" ]; then
             sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;      
@@ -108,7 +108,7 @@ build:
       fi
     - echo "==== ACCESS ====" &&
       echo "==== ACCESS - Prepare the scripts ====" &&
-      cd ../access &&
+      cd SHIPPABLE_REPO_DIR/build/terraform/access &&
       echo "==== Replace region variables as set in Shippable ====" &&
       if [ "$BRANCH" == "development" ]; then
          sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
