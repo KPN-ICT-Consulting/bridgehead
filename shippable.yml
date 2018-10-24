@@ -45,7 +45,7 @@ env:
     - TESTS_LOC_DIR=$SHIPPABLE_REPO_DIR/src/test
     - MOD_LOC=$SHIPPABLE_REPO_DIR/node_modules/.bin/
     - DEV_CREATE_STATE_STORAGE="false"
-    - MASTER_CREATE_STATE_STORAGE="true"
+    - MASTER_CREATE_STATE_STORAGE="false"
 
 #matrix:
 
@@ -282,7 +282,7 @@ jobs:
             runtime:
               options:
                 env:
-                  - MASTER_CREATE_STATE_STORAGE: "true"
+                  - MASTER_CREATE_STATE_STORAGE: "false"
             script:
                  - *template-script
                  - cd build/terraform/state &&
