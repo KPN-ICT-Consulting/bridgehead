@@ -58,16 +58,16 @@ build:
       mkdir -p $CODE_COVERAGE_DIR && 
       pushd $TESTS_LOC_DIR &&
       echo "==== $BRANCH branch will be executed ====";
-      if [ "$DEBUG" == "true" ]; then
-           echo "==== DEBUG List all environment variables ====";
-           printenv;
-      fi
-    - if [ "$BRANCH" == "development" && "$DEV_CREATE_STATE_STORAGE" ]; then
+    - if [ "$BRANCH" == "development" ] && [ "$DEV_CREATE_STATE_STORAGE" = true ]; then
          export CREATE_STATE_STORAGE=true;
-      elif [ "$BRANCH" == "master" && "$MASTER_CREATE_STATE_STORAGE" ]; then
+      elif [ "$BRANCH" == "master" ] && [ "$MASTER_CREATE_STATE_STORAGE" = true ]; then
          export CREATE_STATE_STORAGE=true;
       else
          export CREATE_STATE_STORAGE=false;
+      fi
+    - if [ "$DEBUG" == "true" ]; then
+           echo "==== DEBUG List all environment variables ====";
+           printenv;
       fi
 
   # Probably not needed, but keep this code here until proven
@@ -83,7 +83,7 @@ build:
     - mkdir -p build/terraform &&
       cp -r src/main/terraform/* build/terraform
     - echo "==== STATE ====" &&
-      if [ "$CREATE_STATE_STORAGE" ]; then
+      if [ "$CREATE_STATE_STORAGE" = true ]; then
          echo "==== STATE - Prepare the scripts ====";
          cd build/terraform/state;
          echo "==== Replace region variables as set in Shippable ====";
@@ -108,7 +108,7 @@ build:
       fi
     - echo "==== ACCESS ====" &&
       echo "==== ACCESS - Prepare the scripts ====" &&
-      cd ~/build/terraform/access &&
+      cd ../access &&
       echo "==== Replace region variables as set in Shippable ====" &&
       if [ "$BRANCH" == "development" ]; then
          sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
