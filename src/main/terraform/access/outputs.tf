@@ -21,28 +21,12 @@
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
 
-# ==== Default Region ====
-variable "region" {
-	description = "Region to setup"
-}
-
 #
-# Bucket for TF state
+# Root outputs
 #
-variable "bucket" {
-	description = "Terraform State S3 bucket configuration"
-	type = "map"
-	default = {
-	    count					= 1
-		s3_bucket_name			= "kma-terraform"
-		bucket_name_tag 		= "Terraform State"
-		s3_bucket_versioning 	= "true"			# true if enabled, false is disabled
-	}
+output "iam_root_access_key" {
+	value = "${module.aws.iam_root_access_key}"
 }
-
-variable "isStaging" {
-	description = "set to true if the Staging environment should be created. For Production set to false."
-}
-variable "createStateStorage" {
-	description = "set to true if we need to create the buckets. See explanation in comment"
+output "iam_root_secret_key" {
+	value = "${module.aws.iam_root_secret_key}"
 }

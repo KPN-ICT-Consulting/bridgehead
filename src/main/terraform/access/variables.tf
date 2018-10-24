@@ -21,12 +21,12 @@
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
 
-#
-# outputs
-#
-output "bucket_id" {
-	value = "${element(concat(aws_s3_bucket.www_bucket.*.id, list("")), 0)}"
+variable "staging" {
+	description = "set to true if the Staging environment should be created. For Production set to false."
+	# Set thru commandline
 }
-output "bucket_domain_name" {
-	value = "${element(concat(aws_s3_bucket.www_bucket.*.bucket_domain_name, list("")), 0)}"
-}
+#variable "branch_based_region" {
+#	description = "The region used related to the branch. Fx development=eu-west1 or master=eu-west-2"
+#	type = "string"
+#	default = BRANCH_BASED_REGION
+#}

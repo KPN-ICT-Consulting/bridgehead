@@ -22,27 +22,48 @@
 #*/
 
 provider "aws" {
-	#shared_credentials_file = "${path.cwd}/tf-temp/credentials"
-	profile = "bridgehead"
 	profile = "default"
 	region = "${var.region}"
 }
 
 #
-# S3 bucket for storing TF state
+# S3 BUCKET FOR TF STATE
 #
-module "s3_buckets" {
-	source = "./s3"
+resource "aws_s3_bucket" "state_bucket" {
+	count					= "${var.createStateStorage ? var.bucket["count"] : 0}"
 	
-	count					= "${var.bucket["count"]}"
+	bucket 					= "${format("%s%s", var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
+	acl    					= "private"
 	
-	s3_bucket_name			= "${format("%s%s", var.bucket["s3_bucket_name"], var.isStaging ? "-dev" : "-prod")}"
-	bucket_name_tag			= "${var.bucket["bucket_name_tag"]}"
-	s3_bucket_versioning	= "${var.bucket["s3_bucket_versioning"]}"
+	versioning {
+		enabled 			= "${var.bucket["s3_bucket_versioning"]}"
+	}
+	
+	lifecycle {
+		prevent_destroy		= true
+	}
+	
+	tags {
+		Name 				= "${var.bucket["bucket_name_tag"]}"
+	}
 }
 
-module "iam" {
-	source = "./iam"
+# DynamoDB table for locking state file
+#
+resource "aws_dynamo_table" "dynamodb_tf_state_lock" {
+	count					= "${var.createStateStorage ? 1 : 0}"
 	
-	iam_root = "${var.iam_root}"
+	name 					= "${format("%s%s", "terraform-state-lock-dynamo", var.isStaging ? "-dev" : "-prod")}"
+	hash_key 				= "LockID"
+	read_capacity			= 20
+	write_capacity			= 20
+	
+	attribute {
+		name				= "LockID"
+		type				= "S"
+	}
+	
+	tags {
+		Name				= "DynamoDB Terraform State Lock Table"
+	}
 }

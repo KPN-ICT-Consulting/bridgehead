@@ -29,17 +29,12 @@
 module "aws" {
 	source = "./providers/aws"
 	
-	region = "BRANCH_BASED_REGION"
-	iam_root = "BRANCH_BASED_CAL_DEPLOYER"
-  	isStaging	= "${var.staging}"
+	region 				= "BRANCH_BASED_REGION"
+  	isStaging			= "${var.staging}"
+  	createStateStorage 	= "${var.create_state_storage}"
 }
 
 terraform {
-	required_version = "> 0.7.0"
-#	backend "s3" {
-#		bucket = "bridgehead"
-#		key    = "terraform/bridgehead-tfstate"
-#		region = "BRANCH_BASED_REGION"
-#	}
+	required_version 	= "> 0.7.0"
 }
 

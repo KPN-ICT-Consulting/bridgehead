@@ -24,9 +24,3 @@
 #
 # Root outputs
 #
-output "iam_root_access_key" {
-	value = "${module.aws.iam_root_access_key}"
-}
-output "iam_root_secret_key" {
-	value = "${module.aws.iam_root_secret_key}"
-}

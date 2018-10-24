@@ -1,5 +1,5 @@
 #/*
-# * Copyright (c) 2018 KPN
+# * Copyright (c) 2018 KPN, 
 # *
 # * Permission is hereby granted, free of charge, to any person obtaining
 # * a copy of this software and associated documentation files (the
@@ -21,28 +21,26 @@
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
 
-# ==== Default Region ====
-variable "region" {
-	description = "Region to setup"
+# Note: This file is based upon the awslabs terraform demo, located at:
+#
+#     https://github.com/awslabs/apn-blog/blob/tf_blog_v1.0/terraform_demo/
+#
+
+module "aws" {
+	source = "./providers/aws"
+	
+	region = "BRANCH_BASED_REGION"
+	iam_root = "BRANCH_BASED_CAL_DEPLOYER"
+  	isStaging	= "${var.staging}"
 }
 
-#
-# Bucket for TF state
-#
-variable "bucket" {
-	description = "Terraform State S3 bucket configuration"
-	type = "map"
-	default = {
-	    count					= 1
-		s3_bucket_name			= "kma-terraform"
-		bucket_name_tag 		= "Terraform State"
-		s3_bucket_versioning 	= "true"			# true if enabled, false is disabled
+terraform {
+	required_version = "> 0.7.0"
+	backend "s3" {
+		bucket 			= "kma-terraform-${var.isStaging ? "-dev" : "-prod"}"
+		dynamodb_table 	= "terraform-state-lock-dynamo-${var.isStaging ? "-dev" : "-prod"}"
+		key    			= "terraform/bridgehead-tfstate"
+		region 			= "BRANCH_BASED_REGION"
 	}
 }
 
-variable "isStaging" {
-	description = "set to true if the Staging environment should be created. For Production set to false."
-}
-variable "createStateStorage" {
-	description = "set to true if we need to create the buckets. See explanation in comment"
-}

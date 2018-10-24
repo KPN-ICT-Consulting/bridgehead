@@ -26,23 +26,12 @@ variable "region" {
 	description = "Region to setup"
 }
 
-#
-# Bucket for TF state
-#
-variable "bucket" {
-	description = "Terraform State S3 bucket configuration"
-	type = "map"
-	default = {
-	    count					= 1
-		s3_bucket_name			= "kma-terraform"
-		bucket_name_tag 		= "Terraform State"
-		s3_bucket_versioning 	= "true"			# true if enabled, false is disabled
-	}
+variable "iam_root" {
+	description = "Bridgehead user"
 }
 
 variable "isStaging" {
 	description = "set to true if the Staging environment should be created. For Production set to false."
+	# Set thru commandline
 }
-variable "createStateStorage" {
-	description = "set to true if we need to create the buckets. See explanation in comment"
-}
+

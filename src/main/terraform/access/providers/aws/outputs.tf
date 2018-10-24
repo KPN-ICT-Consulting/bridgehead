@@ -20,16 +20,13 @@
 # * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
-variable "s3_bucket_name" {
-	description = "The S3 bucket name"
-}
-variable "bucket_name_tag" {
-	description = "The bucket name tag"
-}
-variable "s3_bucket_versioning" {
-	description = "Enable versioning or not"
-}
 
-variable "count" {
-	description = "Set to 0 if the resource is skipped. Set to 1 if the resource must be created."
+#
+# Root outputs
+#
+output "iam_root_access_key" {
+	value = "${module.iam.iam_root_access_key}"
+}
+output "iam_root_secret_key" {
+	value = "${module.iam.iam_root_secret_key}"
 }

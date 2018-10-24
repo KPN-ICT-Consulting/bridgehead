@@ -25,6 +25,11 @@ variable "staging" {
 	description = "set to true if the Staging environment should be created. For Production set to false."
 	# Set thru commandline
 }
+variable "create_state_storage" {
+    # This variable is used to create S3 state buckets before anything else is configured using TF.
+	description = "set to true if we need to create the buckets. See explanation in comment"
+	# Set thru commandline
+}
 #variable "branch_based_region" {
 #	description = "The region used related to the branch. Fx development=eu-west1 or master=eu-west-2"
 #	type = "string"
