@@ -57,7 +57,7 @@ resource "aws_s3_bucket" "state_bucket" {
 
 # DynamoDB table for locking state file
 #
-resource "aws_dynamo_table" "dynamodb_tf_state_lock" {
+resource "aws_dynamodb_table" "dynamodb_tf_state_lock" {
 	count					= "${var.createStateStorage}"
 	
 	name 					= "${local.dynamodb_name}"
