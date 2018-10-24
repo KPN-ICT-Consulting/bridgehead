@@ -112,7 +112,7 @@ build:
       fi
     - echo "==== ACCESS ====" &&
       echo "==== ACCESS - Prepare the scripts ====" &&
-      cd SHIPPABLE_REPO_DIR/build/terraform/access &&
+      cd $SHIPPABLE_REPO_DIR/build/terraform/access &&
       echo "==== Replace region variables as set in Shippable ====" &&
       if [ "$BRANCH" == "development" ]; then
          sed -i -r "s|BRANCH_BASED_REGION|$DEV_REGION|g" main.tf;
