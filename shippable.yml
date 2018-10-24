@@ -85,6 +85,7 @@ build:
       if [ "$DEBUG" == "true" ]; then
          ls -l src/main/terraform/;
          ls -l $SHIPPABLE_REPO_DIR/build/terraform/;
+         echo "$CREATE_STATE_STORAGE"
       fi
     - echo "==== STATE ====" &&
       if [ "$CREATE_STATE_STORAGE" == "true" ]; then
