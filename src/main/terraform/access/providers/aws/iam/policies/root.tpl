@@ -59,6 +59,32 @@
     {
       "Effect": "Allow",
       "Action": [
+        "ec2:DescribeAccountAttributes",
+        "ec2:DescribeAvailabilityZones",
+        "ec2:DescribeInternetGateways",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeVpcAttribute",
+        "ec2:DescribeVpcs",
+        "ec2:DescribeInstances",
+        "ec2:DescribeImages",
+        "ec2:DescribeKeyPairs",
+        "ec2:RunInstances"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rds:Describe*",
+        "rds:CreateDBInstance",
+        "rds:CreateDBCluster"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "ecs:DeregisterTaskDefinition",
         "ecs:UpdateService",
         "ecs:CreateService",
