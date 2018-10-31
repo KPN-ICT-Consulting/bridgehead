@@ -40,6 +40,7 @@
         "iam:AttachRolePolicy",
         "iam:GetPolicy",
         "iam:GetUser",
+        "iam:GetInstanceProfile",
         "iam:ListGroups",
         "iam:ListPolicies",
         "iam:ListRoles",
