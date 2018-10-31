@@ -41,6 +41,7 @@
         "iam:ListPolicies",
         "iam:ListRoles",
         "iam:ListUsers",
+        "iam:GetRole",
         "iam:PassRole",
         "iam:ListRoles"
       ],
