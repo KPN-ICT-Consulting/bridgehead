@@ -36,6 +36,7 @@
         "iam:CreateRole",
         "iam:CreateUser",
         "iam:CreateInstanceProfile",
+        "iam:CreateServiceLinkedRole",
         "iam:AttachRolePolicy",
         "iam:GetPolicy",
         "iam:GetUser",
@@ -43,6 +44,7 @@
         "iam:ListPolicies",
         "iam:ListRoles",
         "iam:ListUsers",
+        "iam:ListAttachedRolePolicies",
         "iam:GetRole",
         "iam:PassRole",
         "iam:ListRoles"
