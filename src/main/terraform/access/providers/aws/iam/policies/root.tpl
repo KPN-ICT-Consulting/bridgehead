@@ -35,6 +35,8 @@
         "iam:CreatePolicy",
         "iam:CreateRole",
         "iam:CreateUser",
+        "iam:CreateInstanceProfile",
+        "iam:AttachRolePolicy",
         "iam:GetPolicy",
         "iam:GetUser",
         "iam:ListGroups",
@@ -69,6 +71,13 @@
       "Effect": "Allow",
       "Action": [
         "ec2:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:*"
       ],
       "Resource": "*"
     },
