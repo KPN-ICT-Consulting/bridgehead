@@ -21,6 +21,14 @@
 # * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #*/
 
+data "template_file" "policy" {
+  template = "${file("${path.module}/policies/root.tpl")}"
+
+  vars {
+    dynamodb = "${var.dynamodb}"
+  }
+}
+
 #
 # IAM Users
 #
@@ -37,7 +45,7 @@ resource "aws_iam_user_policy" "iam_root_policy" {
 	name = "iam_root_policy"
 	user = "${aws_iam_user.iam_root.name}"
 	
-	policy = "${file("${path.module}/policies/root.json")}"
+	policy = "${data.template_file.policy.rendered}"
 }
 
 resource "aws_iam_access_key" "iam_root" {

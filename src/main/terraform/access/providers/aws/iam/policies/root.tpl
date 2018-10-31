@@ -8,7 +8,7 @@
         "dynamodb:PutItem",
         "dynamodb:DeleteItem"
       ],
-      "Resource": "arn:aws:dynamodb:*:*:table/${var.dynamodb}"
+      "Resource": "arn:aws:dynamodb:*:*:table/${dynamodb}"
     },
     {
       "Effect": "Allow",
@@ -23,20 +23,34 @@
     {
       "Effect": "Allow",
       "Action": [
+        "iam:AttachUserPolicy",
+        "iam:DetachUserPolicy"
+      ],
+      "Resource": "arn:aws:iam::*:role/cal/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "iam:CreateGroup",
         "iam:CreatePolicy",
         "iam:CreateRole",
         "iam:CreateUser",
+        "iam:CreateInstanceProfile",
+        "iam:CreateServiceLinkedRole",
+        "iam:AttachRolePolicy",
         "iam:GetPolicy",
         "iam:GetUser",
+        "iam:GetInstanceProfile",
         "iam:ListGroups",
         "iam:ListPolicies",
         "iam:ListRoles",
         "iam:ListUsers",
+        "iam:ListAttachedRolePolicies",
+        "iam:GetRole",
         "iam:PassRole",
         "iam:ListRoles"
       ],
-      "Resource": "arn:aws:iam::*:role/cal/*"
+      "Resource": "*"
     },
     {
       "Effect": "Allow",
@@ -53,6 +67,36 @@
       "Action": [
         "cloudwatch:PutMetricAlarm",
         "cloudwatch:DeleteAlarms"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rds:Describe*",
+        "rds:CreateDBInstance",
+        "rds:CreateDBCluster"
       ],
       "Resource": "*"
     },

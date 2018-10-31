@@ -30,4 +30,5 @@ module "iam" {
 	source = "./iam"
 	
 	iam_root = "${var.iam_root}"
+	dynamodb = "${var.dynamodb}"
 }

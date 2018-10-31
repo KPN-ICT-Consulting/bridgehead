@@ -27,3 +27,6 @@
 variable "iam_root" {
 	description = "Bridgehead user"
 }
+variable "dynamodb" {
+	description = "The DynamoDB table to set policies on"
+}
