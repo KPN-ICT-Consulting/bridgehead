@@ -30,6 +30,10 @@ variable "iam_root" {
 	description = "Bridgehead user"
 }
 
+variable "dynamodb" {
+	description = "The DynamoDB table to set policies on"
+}
+
 variable "isStaging" {
 	description = "set to true if the Staging environment should be created. For Production set to false."
 	# Set thru commandline

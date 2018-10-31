@@ -29,9 +29,10 @@
 module "aws" {
 	source = "./providers/aws"
 	
-	region = "BRANCH_BASED_REGION"
-	iam_root = "BRANCH_BASED_CAL_DEPLOYER"
+	region 		= "BRANCH_BASED_REGION"
+	iam_root 	= "BRANCH_BASED_CAL_DEPLOYER"
   	isStaging	= "${var.staging}"
+  	dynamodb	= "terraform-state-lock-dynamo-STAGING_ENV"
 }
 
 terraform {
