@@ -68,6 +68,13 @@
         "ecs:ListTaskDefinitions"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "*"
     }
   ]
 }
