@@ -67,44 +67,14 @@
     {
       "Effect": "Allow",
       "Action": [
-        "ec2:*Vpc*",
-        "ec2:*Subnet*",
-        "ec2:*Gateway*",
-        "ec2:*Vpn*",
-        "ec2:*Route*",
-        "ec2:*Address*",
-        "ec2:*SecurityGroup*",
-        "ec2:*NetworkAcl*",
-        "ec2:*DhcpOptions*",
-        "ec2:RunInstances",
-        "ec2:StopInstances",
-        "ec2:StartInstances",
-        "ec2:TerminateInstances",
-        "ec2:Describe*"
+        "ec2:*"
       ],
       "Resource": "*"
     },
     {
       "Effect": "Allow",
       "Action": [
-        "route53:CreateHostedZone",
-        "route53:UpdateHostedZoneComment",
-        "route53:GetHostedZone",
-        "route53:ListHostedZones",
-        "route53:DeleteHostedZone",
-        "route53:ChangeResourceRecordSets",
-        "route53:ListResourceRecordSets",
-        "route53:GetHostedZoneCount",
-        "route53:ListHostedZonesByName",
-        "route53:CreateHealthCheck",
-        "route53:UpdateHealthCheck",
-        "route53:GetHealthCheck",
-        "route53:ListHealthChecks",
-        "route53:DeleteHealthCheck",
-        "route53:GetCheckerIpRanges",
-        "route53:GetHealthCheckCount",
-        "route53:GetHealthCheckStatus",
-        "route53:GetHealthCheckLastFailureReason"
+        "route53:*"
       ],
       "Resource": "*"
     },
