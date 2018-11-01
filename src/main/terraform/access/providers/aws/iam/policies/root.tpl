@@ -39,6 +39,7 @@
         "iam:CreateServiceLinkedRole",
         "iam:DetachRolePolicy",
         "iam:AttachRolePolicy",
+        "iam:RemoveRoleFromInstanceProfile",
         "iam:GetPolicy",
         "iam:GetUser",
         "iam:GetInstanceProfile",
