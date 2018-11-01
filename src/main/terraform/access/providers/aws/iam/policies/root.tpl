@@ -40,6 +40,7 @@
         "iam:DetachRolePolicy",
         "iam:AttachRolePolicy",
         "iam:RemoveRoleFromInstanceProfile",
+        "iam:DeleteInstanceProfile",
         "iam:GetPolicy",
         "iam:GetUser",
         "iam:GetInstanceProfile",
