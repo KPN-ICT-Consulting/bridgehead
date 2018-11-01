@@ -31,27 +31,14 @@
     {
       "Effect": "Allow",
       "Action": [
-        "iam:CreateGroup",
-        "iam:CreatePolicy",
-        "iam:CreateRole",
-        "iam:CreateUser",
-        "iam:CreateInstanceProfile",
-        "iam:CreateServiceLinkedRole",
+        "iam:Create*",
+        "iam:Get*",
+        "iam:List*",
         "iam:DetachRolePolicy",
         "iam:AttachRolePolicy",
         "iam:RemoveRoleFromInstanceProfile",
         "iam:DeleteInstanceProfile",
-        "iam:GetPolicy",
-        "iam:GetUser",
-        "iam:GetInstanceProfile",
-        "iam:ListGroups",
-        "iam:ListPolicies",
-        "iam:ListRoles",
-        "iam:ListUsers",
-        "iam:ListAttachedRolePolicies",
-        "iam:GetRole",
-        "iam:PassRole",
-        "iam:ListRoles"
+        "iam:PassRole"
       ],
       "Resource": "*"
     },
