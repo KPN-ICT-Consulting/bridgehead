@@ -86,8 +86,16 @@
     {
       "Effect": "Allow",
       "Action": [
+        "cloudfront:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "rds:Describe*",
-        "rds:Create*"
+        "rds:Create*",
+        "rds:Modify*"
       ],
       "Resource": "*"
     },
@@ -95,13 +103,12 @@
       "Effect": "Allow",
       "Action": [
         "ecs:DeregisterTaskDefinition",
-        "ecs:UpdateService",
-        "ecs:CreateService",
+        "ecs:Update*",
         "ecs:RegisterTaskDefinition",
-        "ecs:DeleteService",
-        "ecs:DescribeServices",
+        "ecs:Delete*",
+        "ecs:Describe*",
         "ecs:ListTaskDefinitions",
-        "ecs:CreateCluster"
+        "ecs:Create*"
       ],
       "Resource": "*"
     },
