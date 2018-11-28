@@ -87,8 +87,7 @@
       "Effect": "Allow",
       "Action": [
         "rds:Describe*",
-        "rds:CreateDBInstance",
-        "rds:CreateDBCluster"
+        "rds:Create*"
       ],
       "Resource": "*"
     },
@@ -101,7 +100,8 @@
         "ecs:RegisterTaskDefinition",
         "ecs:DeleteService",
         "ecs:DescribeServices",
-        "ecs:ListTaskDefinitions"
+        "ecs:ListTaskDefinitions",
+        "ecs:CreateCluster"
       ],
       "Resource": "*"
     },
