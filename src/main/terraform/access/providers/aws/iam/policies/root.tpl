@@ -93,9 +93,7 @@
     {
       "Effect": "Allow",
       "Action": [
-        "rds:Describe*",
-        "rds:Create*",
-        "rds:Modify*"
+        "rds:*"
       ],
       "Resource": "*"
     },
